@@ -1,16 +1,29 @@
+#define BUILDING_NODE_EXTENSION
 #include <node.h>
-#include <v8.h>
 
 using namespace v8;
 
-Handle<Value> Method(const Arguments& args) {
+Handle<Value> Add(const Arguments& args) {
   HandleScope scope;
-  return scope.Close(args[0]->ToString());
+
+  if (args.Length() < 2) {
+    ThrowException(Exception::TypeError(String::New("Wrong number of arguments")));
+    return scope.Close(Undefined());
+  }
+
+  if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+    ThrowException(Exception::TypeError(String::New("Wrong arguments")));
+    return scope.Close(Undefined());
+  }
+
+  Local<Number> num = Number::New(args[0]->NumberValue() + args[1]->NumberValue());
+
+  return scope.Close(num);
 }
 
-void init(Handle<Object> exports) {
-  exports->Set(String::NewSymbol("hello"),
-      FunctionTemplate::New(Method)->GetFunction());
+void Init(Handle<Object> exports) {
+  exports->Set(String::NewSymbol("add"),
+      FunctionTemplate::New(Add)->GetFunction());
 }
 
-NODE_MODULE(addon, init)
+NODE_MODULE(addon, Init)

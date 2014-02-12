@@ -1,3 +1,3 @@
 var addon = require('./build/Release/addon');
 
-console.log(addon.hello('world'));
+console.log('This should be eight:', addon.add(3,5));
