@@ -6,9 +6,8 @@ Handle<Value> RunCallback(const Arguments& args) {
   HandleScope scope;
 
   Local<Function> cb = Local<Function>::Cast(args[0]);
-  const unsigned argc = 1;
-  Local<Value> argv[argc] = { Local<Value>::New(String::New("hello world")) };
-  cb->Call(Context::GetCurrent()->Global(), argc, argv);
+  Local<Value> argv[1] = { Local<Value>::New(String::New("hello world")) };
+  cb->Call(Context::GetCurrent()->Global(), 1, argv);
 
   return scope.Close(Undefined());
 }

@@ -1,5 +1,5 @@
 var addon = require('./build/Release/addon');
 
 addon(function(msg) {
-  console.log(msg);
+  console.log(arguments);
 });
