@@ -1,25 +1,10 @@
 #include <node.h>
+#include "myobject.h"
 
 using namespace v8;
 
-Handle<Value> MyFunction(const Arguments& args) {
-  HandleScope scope;
-  return scope.Close(String::New("hello world"));
+void InitAll(Handle<Object> exports) {
+  MyObject::Init(exports);
 }
 
-Handle<Value> CreateFunction(const Arguments& args) {
-  HandleScope scope;
-
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(MyFunction);
-  Local<Function> fn = tpl->GetFunction();
-  fn->SetName(String::New("theFunction")); // omit this to make it anonymous
-
-  return scope.Close(fn);
-}
-
-void Init(Handle<Object> exports, Handle<Object> module) {
-  module->Set(String::NewSymbol("exports"), 
-      FunctionTemplate::New(CreateFunction)->GetFunction());
-}
-
-NODE_MODULE(addon, Init)
+NODE_MODULE(addon, InitAll)
