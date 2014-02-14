@@ -2,18 +2,24 @@
 
 using namespace v8;
 
-Handle<Value> CreateObject(const Arguments& args) {
+Handle<Value> MyFunction(const Arguments& args) {
+  HandleScope scope;
+  return scope.Close(String::New("hello world"));
+}
+
+Handle<Value> CreateFunction(const Arguments& args) {
   HandleScope scope;
 
-  Local<Object> obj = Object::New();
-  obj->Set(String::NewSymbol("msg"), args[0]->ToString());
+  Local<FunctionTemplate> tpl = FunctionTemplate::New(MyFunction);
+  Local<Function> fn = tpl->GetFunction();
+  fn->SetName(String::New("theFunction")); // omit this to make it anonymous
 
-  return scope.Close(obj);
+  return scope.Close(fn);
 }
 
 void Init(Handle<Object> exports, Handle<Object> module) {
   module->Set(String::NewSymbol("exports"), 
-      FunctionTemplate::New(CreateObject)->GetFunction());
+      FunctionTemplate::New(CreateFunction)->GetFunction());
 }
 
 NODE_MODULE(addon, Init)
