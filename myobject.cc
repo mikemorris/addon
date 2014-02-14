@@ -16,9 +16,6 @@ void MyObject::Init() {
   Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
   tpl->SetClassName(String::NewSymbol("MyObject"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  // Prototype
-  tpl->PrototypeTemplate()->Set(String::NewSymbol("plusOne"),
-      FunctionTemplate::New(PlusOne)->GetFunction());
   constructor = Persistent<Function>::New(tpl->GetFunction());
 }
 
@@ -47,13 +44,4 @@ Handle<Value> MyObject::NewInstance(const Arguments& args) {
   Local<Object> instance = constructor->NewInstance(argc, argv);
 
   return scope.Close(instance);
-}
-
-Handle<Value> MyObject::PlusOne(const Arguments& args) {
-  HandleScope scope;
-
-  MyObject* obj = ObjectWrap::Unwrap<MyObject>(args.This());
-  obj->value_ += 1;
-
-  return scope.Close(Number::New(obj->value_));
 }
