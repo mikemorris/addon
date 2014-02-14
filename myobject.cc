@@ -43,7 +43,7 @@ Handle<Value> MyObject::New(const Arguments& args) {
 Handle<Value> MyObject::PlusOne(const Arguments& args) {
   HandleScope scope;
 
-  MyObject* obj = ObjectWwap::Unwrap<MyObject>(args.This());
+  MyObject* obj = ObjectWrap::Unwrap<MyObject>(args.This());
   obj->value_ += 1;
 
   return scope.Close(Number::New(obj->value_));
