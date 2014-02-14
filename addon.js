@@ -1,5 +1,6 @@
 var addon = require('./build/Release/addon');
 
-addon(function(msg) {
-  console.log(arguments);
-});
+var obj1 = addon('hello');
+var obj2 = addon('world');
+
+console.log(obj1.msg, obj2.msg);
