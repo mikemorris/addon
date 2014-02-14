@@ -11,7 +11,7 @@ MyObject::MyObject(double value) : value_(value) {
 MyObject::~MyObject() {
 }
 
-void MyObject::Init(Handle<Object> exports) {
+void MyObject::Init() {
   // Prepare constructor template
   Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
   tpl->SetClassName(String::NewSymbol("MyObject"));
@@ -20,7 +20,6 @@ void MyObject::Init(Handle<Object> exports) {
   tpl->PrototypeTemplate()->Set(String::NewSymbol("plusOne"),
       FunctionTemplate::New(PlusOne)->GetFunction());
   constructor = Persistent<Function>::New(tpl->GetFunction());
-  exports->Set(String::NewSymbol("MyObject"), constructor);
 }
 
 Handle<Value> MyObject::New(const Arguments& args) {
@@ -38,6 +37,16 @@ Handle<Value> MyObject::New(const Arguments& args) {
     Local<Value> argv[argc] = { args[0] };
     return scope.Close(constructor->NewInstance(argc, argv));
   }
+}
+
+Handle<Value> MyObject::NewInstance(const Arguments& args) {
+  HandleScope scope;
+
+  const unsigned argc = 1;
+  Handle<Value> argv[argc] = { args[0] };
+  Local<Object> instance = constructor->NewInstance(argc, argv);
+
+  return scope.Close(instance);
 }
 
 Handle<Value> MyObject::PlusOne(const Arguments& args) {

@@ -1,6 +1,11 @@
-var addon = require('./build/Release/addon');
+var createObject = require('./build/Release/addon');
 
-var obj = new addon.MyObject(10);
+var obj = createObject(10);
 console.log(obj.plusOne());
 console.log(obj.plusOne());
 console.log(obj.plusOne());
+
+var obj2 = createObject(20);
+console.log(obj2.plusOne());
+console.log(obj2.plusOne());
+console.log(obj2.plusOne());

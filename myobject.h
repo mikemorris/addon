@@ -5,7 +5,8 @@
 
 class MyObject : public node::ObjectWrap {
   public:
-    static void Init(v8::Handle<v8::Object> exports);
+    static void Init();
+    static v8::Handle<v8::Value> NewInstance(const v8::Arguments& args);
 
   private:
     explicit MyObject(double value = 0);
