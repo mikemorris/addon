@@ -1,9 +1,7 @@
 #include <node.h>
 #include "myobject.h"
 
-using namespace v8;
-
-Persistent<Function> MyObject::constructor;
+v8::Persistent<v8::Function> MyObject::constructor;
 
 MyObject::MyObject(double value) : value_(value) {
 }
@@ -13,14 +11,14 @@ MyObject::~MyObject() {
 
 void MyObject::Init() {
   // Prepare constructor template
-  Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-  tpl->SetClassName(String::NewSymbol("MyObject"));
+  v8::Local<v8::FunctionTemplate> tpl = v8::FunctionTemplate::New(New);
+  tpl->SetClassName(v8::String::NewSymbol("MyObject"));
   tpl->InstanceTemplate()->SetInternalFieldCount(1);
-  constructor = Persistent<Function>::New(tpl->GetFunction());
+  constructor = v8::Persistent<v8::Function>::New(tpl->GetFunction());
 }
 
-Handle<Value> MyObject::New(const Arguments& args) {
-  HandleScope scope;
+v8::Handle<v8::Value> MyObject::New(const v8::Arguments& args) {
+  v8::HandleScope scope;
 
   if (args.IsConstructCall()) {
     // Invoked as constructor: `new MyObject(...)`
@@ -31,17 +29,17 @@ Handle<Value> MyObject::New(const Arguments& args) {
   } else {
     // Invoked as plain function: `MyObject(...)`, turn into construct call
     const int argc = 1;
-    Local<Value> argv[argc] = { args[0] };
+    v8::Local<v8::Value> argv[argc] = { args[0] };
     return scope.Close(constructor->NewInstance(argc, argv));
   }
 }
 
-Handle<Value> MyObject::NewInstance(const Arguments& args) {
-  HandleScope scope;
+v8::Handle<v8::Value> MyObject::NewInstance(const v8::Arguments& args) {
+  v8::HandleScope scope;
 
   const unsigned argc = 1;
-  Handle<Value> argv[argc] = { args[0] };
-  Local<Object> instance = constructor->NewInstance(argc, argv);
+  v8::Handle<v8::Value> argv[argc] = { args[0] };
+  v8::Local<v8::Object> instance = constructor->NewInstance(argc, argv);
 
   return scope.Close(instance);
 }

@@ -1,31 +1,29 @@
 #include <node.h>
 #include "myobject.h"
 
-using namespace v8;
-
-Handle<Value> CreateObject(const Arguments& args) {
-  HandleScope scope;
+v8::Handle<v8::Value> CreateObject(const v8::Arguments& args) {
+  v8::HandleScope scope;
   return scope.Close(MyObject::NewInstance(args));
 }
 
-Handle<Value> Add(const Arguments& args) {
-  HandleScope scope;
+v8::Handle<v8::Value> Add(const v8::Arguments& args) {
+  v8::HandleScope scope;
 
   MyObject* obj1 = node::ObjectWrap::Unwrap<MyObject>(args[0]->ToObject());
   MyObject* obj2 = node::ObjectWrap::Unwrap<MyObject>(args[1]->ToObject());
 
-  double sum = obj1->Val() + obj2->Val();
-  return scope.Close(Number::New(sum));
+  double sum = obj1->Value() + obj2->Value();
+  return scope.Close(v8::Number::New(sum));
 }
 
-void InitAll(Handle<Object> exports) {
+void InitAll(v8::Handle<v8::Object> exports) {
   MyObject::Init();
 
-  exports->Set(String::NewSymbol("createObject"),
-      FunctionTemplate::New(CreateObject)->GetFunction());
+  exports->Set(v8::String::NewSymbol("createObject"),
+      v8::FunctionTemplate::New(CreateObject)->GetFunction());
 
-  exports->Set(String::NewSymbol("add"),
-      FunctionTemplate::New(Add)->GetFunction());
+  exports->Set(v8::String::NewSymbol("add"),
+      v8::FunctionTemplate::New(Add)->GetFunction());
 }
 
 NODE_MODULE(addon, InitAll)
